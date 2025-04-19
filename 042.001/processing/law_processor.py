@@ -93,7 +93,13 @@ def get_highlighted_articles(mst, keyword):
 
             if keyword_clean in clean(항내용) or 호출력:
                 uni_num = chr(9311 + int(항번호)) if 항번호.isdigit() else 항번호
-                항출력.append(f"{uni_num} {highlight(항내용, keyword)}<br>" + "<br>".join(호출력))
+               try:
+                  uni_num = chr(9311 + int(항번호))  # ① = chr(9312)
+               except (ValueError, TypeError):
+                  uni_num = 항번호
+
+항출력.append(f"{uni_num} {highlight(항내용, keyword)}<br>" + "<br>".join(호출력))
+
 
         if 조출력 or 항출력:
             clean_title = f"제{조번호}조({조제목})"
