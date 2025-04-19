@@ -71,33 +71,33 @@ def get_highlighted_articles(mst, keyword):
             호출력 = []
 
             if keyword_clean in clean(항내용):
-                조출력 = True
+               조출력 = True
 
             for 호 in 항.findall("호"):
-                호내용 = 호.findtext("호내용", "") or ""
-                if keyword_clean in clean(호내용):
-                    조출력 = True
-                    호출력.append(highlight(호내용, keyword))
+               호내용 = 호.findtext("호내용", "") or ""
+               if keyword_clean in clean(호내용):
+                   조출력 = True
+                   호출력.append(f"{highlight(호내용, keyword)}")
 
-                for 목 in 호.findall("목"):
-                    목내용 = 목.findtext("목내용", "") or ""
-                    if keyword_clean in clean(목내용):
-                        조출력 = True
-                        호출력.append(highlight(목내용, keyword))
+               for 목 in 호.findall("목"):
+                   목내용 = 목.findtext("목내용", "") or ""
+                   if keyword_clean in clean(목내용):
+                      조출력 = True
+                      호출력.append(f"&nbsp;&nbsp;{highlight(목내용, keyword)}")
 
-            for 목 in 항.findall("목"):
-                목내용 = 목.findtext("목내용", "") or ""
-                if keyword_clean in clean(목내용):
-                    조출력 = True
-                    호출력.append(highlight(목내용, keyword))
+          for 목 in 항.findall("목"):
+              목내용 = 목.findtext("목내용", "") or ""
+              if keyword_clean in clean(목내용):
+                   조출력 = True
+                   호출력.append(f"&nbsp;&nbsp;{highlight(목내용, keyword)}")
 
-            if keyword_clean in clean(항내용) or 호출력:
-                try:
-                    항번호_str = 항번호 if 항번호 is not None else ""
-                    uni_num = chr(9311 + int(항번호_str)) if 항번호_str.isdigit() else 항번호_str
-                except Exception:
-                    uni_num = 항번호 or ""
-                항출력.append(f"{uni_num} {highlight(항내용, keyword)}<br>" + "<br>".join(호출력))
+          if keyword_clean in clean(항내용) or 호출력:
+               try:
+                   항번호_str = 항번호 if 항번호 is not None else ""
+                   uni_num = chr(9311 + int(항번호_str)) if 항번호_str.isdigit() else 항번호_str
+               except Exception:
+                   uni_num = 항번호 or ""
+               항출력.append(f"{uni_num} {highlight(항내용, keyword)}<br>" + "<br>".join(호출력))
 
         if 조출력 or 항출력:
             clean_title = f"제{조번호}조({조제목})"
