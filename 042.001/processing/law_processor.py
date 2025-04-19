@@ -77,7 +77,6 @@ def get_highlighted_articles(mst, keyword):
                 if keyword_clean in clean(호내용):
                     조출력 = True
                     호출력.append(f"{highlight(호내용, keyword)}")
-
                 for 목 in 호.findall("목"):
                     목내용 = 목.findtext("목내용", "") or ""
                     if keyword_clean in clean(목내용):
@@ -92,7 +91,7 @@ def get_highlighted_articles(mst, keyword):
 
             if keyword_clean in clean(항내용) or 호출력:
                 try:
-                    항번호_str = 항.findtext("항번호") if 항 is not None and 항.findtext("항번호") is not None else ""
+                    항번호_str = 항.findtext("항번호") or ""
                     uni_num = chr(9311 + int(항번호_str)) if 항번호_str.isdigit() else 항번호_str
                 except Exception:
                     uni_num = 항번호_str or ""
