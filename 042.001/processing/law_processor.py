@@ -6,6 +6,7 @@ import re
 OC = "chetera"
 BASE = "http://www.law.go.kr"
 
+
 def get_law_list_from_api(query):
     exact_query = f'\"{query}\"'
     encoded_query = quote(exact_query)
@@ -29,6 +30,7 @@ def get_law_list_from_api(query):
         page += 1
     return laws
 
+
 def get_law_text_by_mst(mst):
     url = f"{BASE}/DRF/lawService.do?OC={OC}&target=law&MST={mst}&type=XML"
     try:
@@ -38,13 +40,16 @@ def get_law_text_by_mst(mst):
     except:
         return None
 
+
 def clean(text):
     return re.sub(r"\s+", "", text or "")
+
 
 def highlight(text, keyword):
     if not text:
         return ""
     return text.replace(keyword, f"<span style='color:red'>{keyword}</span>")
+
 
 def get_highlighted_articles(mst, keyword):
     xml_data = get_law_text_by_mst(mst)
@@ -66,38 +71,38 @@ def get_highlighted_articles(mst, keyword):
         항출력 = []
 
         for 항 in 항들:
-            항번호 = 항.findtext("항번호", "").strip()
             항내용 = 항.findtext("항내용", "") or ""
             호출력 = []
 
             if keyword_clean in clean(항내용):
-               조출력 = True
+                조출력 = True
 
             for 호 in 항.findall("호"):
-               호내용 = 호.findtext("호내용", "") or ""
-               if keyword_clean in clean(호내용):
-                   조출력 = True
-                   호출력.append(f"{highlight(호내용, keyword)}")
+                호내용 = 호.findtext("호내용", "") or ""
+                if keyword_clean in clean(호내용):
+                    조출력 = True
+                    호출력.append(highlight(호내용, keyword))
 
-               for 목 in 호.findall("목"):
-                   목내용 = 목.findtext("목내용", "") or ""
-                   if keyword_clean in clean(목내용):
-                      조출력 = True
-                      호출력.append(f"&nbsp;&nbsp;{highlight(목내용, keyword)}")
+                for 목 in 호.findall("목"):
+                    목내용 = 목.findtext("목내용", "") or ""
+                    if keyword_clean in clean(목내용):
+                        조출력 = True
+                        호출력.append(highlight(목내용, keyword))
 
-          for 목 in 항.findall("목"):
-              목내용 = 목.findtext("목내용", "") or ""
-              if keyword_clean in clean(목내용):
-                   조출력 = True
-                   호출력.append(f"&nbsp;&nbsp;{highlight(목내용, keyword)}")
+            for 목 in 항.findall("목"):
+                목내용 = 목.findtext("목내용", "") or ""
+                if keyword_clean in clean(목내용):
+                    조출력 = True
+                    호출력.append(highlight(목내용, keyword))
 
-          if keyword_clean in clean(항내용) or 호출력:
-               try:
-                   항번호_str = 항번호 if 항번호 is not None else ""
-                   uni_num = chr(9311 + int(항번호_str)) if 항번호_str.isdigit() else 항번호_str
-               except Exception:
-                   uni_num = 항번호 or ""
-               항출력.append(f"{uni_num} {highlight(항내용, keyword)}<br>" + "<br>".join(호출력))
+            if keyword_clean in clean(항내용) or 호출력:
+                try:
+                    항번호_str = 항.findtext("항번호") if 항.findtext("항번호") is not None else ""
+                    uni_num = chr(9311 + int(항번호_str)) if 항번호_str.isdigit() else 항번호_str
+                except Exception:
+                    uni_num = 항번호_str or ""
+
+                항출력.append(f"{uni_num} {highlight(항내용, keyword)}<br>" + "<br>".join(호출력))
 
         if 조출력 or 항출력:
             clean_title = f"제{조번호}조({조제목})"
