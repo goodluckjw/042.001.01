@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import streamlit as st
-from law_processor import get_law_list_from_api, get_highlighted_articles
+from processing.law_processor import get_law_list_from_api, get_highlighted_articles
 
 st.set_page_config(page_title="📘 부칙 개정 도우미")
 st.title("📘 부칙 개정 도우미")
