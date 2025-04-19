@@ -92,7 +92,7 @@ def get_highlighted_articles(mst, keyword):
 
             if keyword_clean in clean(항내용) or 호출력:
                 try:
-                    항번호_str = 항.findtext("항번호", default="") if 항 is not None else ""
+                    항번호_str = 항.findtext("항번호", "") if 항 is not None else ""
                     uni_num = chr(9311 + int(항번호_str)) if 항번호_str.isdigit() else 항번호_str
                 except Exception:
                     uni_num = 항번호_str or ""
