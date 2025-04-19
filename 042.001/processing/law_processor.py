@@ -73,6 +73,7 @@ def get_highlighted_articles(mst, keyword):
         for 항 in 항들:
             항내용 = 항.findtext("항내용", "") or ""
             호출력 = []
+            조출력 = False
 
             if keyword_clean in clean(항내용):
                 조출력 = True
@@ -81,19 +82,19 @@ def get_highlighted_articles(mst, keyword):
                 호내용 = 호.findtext("호내용", "") or ""
                 if keyword_clean in clean(호내용):
                     조출력 = True
-                    호출력.append(highlight(호내용, keyword))
+                    호출력.append(f"{highlight(호내용, keyword)}")
 
                 for 목 in 호.findall("목"):
                     목내용 = 목.findtext("목내용", "") or ""
                     if keyword_clean in clean(목내용):
                         조출력 = True
-                        호출력.append(highlight(목내용, keyword))
+                        호출력.append(f"&nbsp;&nbsp;{highlight(목내용, keyword)}")
 
             for 목 in 항.findall("목"):
                 목내용 = 목.findtext("목내용", "") or ""
                 if keyword_clean in clean(목내용):
                     조출력 = True
-                    호출력.append(highlight(목내용, keyword))
+                    호출력.append(f"&nbsp;&nbsp;{highlight(목내용, keyword)}")
 
             if keyword_clean in clean(항내용) or 호출력:
                 try:
